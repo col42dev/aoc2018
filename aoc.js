@@ -37,7 +37,7 @@ if (matches && matches.length == 2) {
     console.log(result);
 } else {
     console.log('usage:');
-    console.log('   npm start <day> <part>');
+    console.log('   node aoc <day> <part>');
     console.log('example:');
-    console.log('   npm start 5 2');
+    console.log('   node aoc 5 2');
 }

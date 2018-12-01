@@ -16,7 +16,7 @@ module.exports = {
             const seen = {};
             while (true) {
                 for (const num of data) {
-                    accFreq += parseInt(num);
+                    accFreq += Number(num);
 
                     if (seen[accFreq]) {
                         return accFreq;
