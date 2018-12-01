@@ -1,9 +1,11 @@
-let _ = require('underscore');
+
 let fs = require('fs');
 
 console.log('aoc2018');
+
+
 let day = [];
-_.each(_.range(25), function(dayDatum, dayIndex, dayList) {
+Array.from(Array(25).keys()).forEach(function(dayDatum, dayIndex, dayList) {
     
     let sourceFilename = './day' +
          function pad(n, width, z) {
@@ -26,7 +28,7 @@ if (matches && matches.length == 2) {
     }
     console.log('day:' + (dayIndex + 1));
 
-    let partIndex = parseInt(matches[1] - 1);
+    let partIndex = Number(matches[1] - 1);
     if (partIndex < 0 || partIndex >= 2) {
         console.log('part param value out of range');
         return;
