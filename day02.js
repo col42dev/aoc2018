@@ -8,11 +8,11 @@ data = data.toString().split('\r\n');
 module.exports = {
     parts: [ 
         function()  {
-            let matcheCounts = ['2', '3'].map((repeatCheck) => {
-                return data.filter((id) => {
+            let matcheCounts = ['2', '3'].map(repeatCheck => {
+                return data.filter(id => {
                     let text = id.split('').sort().join('');
                     let match = null;
-                    let rePattern =/([a-zA-Z]).*(\1)/g;
+                    let rePattern = /([a-zA-Z]).*(\1)/g;
                     while (match = rePattern.exec(text)) {
                         if (match[0].length == repeatCheck) {
                             return true;
@@ -23,28 +23,19 @@ module.exports = {
                 });
             });
 
-            return matcheCounts[0].length * matcheCounts[1].length; //7688
+            return matcheCounts[0].length * matcheCounts[1].length;
         },
         function() {
-
             return Array.from(Array(data[0].length).keys())
-                .map(function(value) {
+                .map(value => {
                     var counts = {};
-                    data.map((id) => {
-                        return id.slice(0, value) + id.slice(value+1);
-                    })
+                    data.map(id => id.slice(0, value) + id.slice(value + 1))
                     .sort()
-                    .forEach(function(x) { counts[x] = (counts[x] || 0)+1; });
+                    .forEach(x => counts[x] = (counts[x] || 0) + 1);
                     
-                    let res = Object.keys(counts).filter((key) => {
-                        return (counts[key] > 1) ? true : false;
-                    });
-
-                    return res;
+                    return Object.keys(counts).filter(key => (counts[key] > 1) ? true : false);
                 })
-                .reduce((item, current) => {
-                    return item + current;
-                });
+                .reduce((item, current) => item + current);
         }]    
 }
 
