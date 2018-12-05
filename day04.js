@@ -53,7 +53,55 @@ module.exports = {
 
             return sleepiest * mins.indexOf(Math.max(...mins));
         },
+        
         function() {
+
+            data.sort((a, b) => {
+                let pattern = /\[(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\] (.*)/;
+                return [pattern.exec(a), pattern.exec(b)].reduce((prev, curr) => {
+                    return dates.compare(new Date(Number(prev[1]), Number(prev[2]), Number(prev[3]), Number(prev[4]), Number(prev[5])), new Date(Number(curr[1]), Number(curr[2]), Number(curr[3]), Number(curr[4]), Number(curr[5])));
+                });
+            });
+
+            let guards = {};
+
+            let guardId = 0;
+            let sleeps = 0;
+
+            data.forEach(value => {
+                let match = /\[(\d+)-(\d+)-(\d+) (\d+)\:(\d+)\] (.*)/.exec(value);
+
+                let matchGuard = /Guard #(\d+) begins shift/.exec(match[6]);
+                if (matchGuard) {
+                    guardId = Number(matchGuard[1]);
+                    if (!guards.hasOwnProperty(guardId)) {
+                        guards[guardId] = [];
+                    }
+                } else if (match[6] == 'wakes up') {
+                    let wakes = Number(match[5]);
+                    guards[guardId].push(new Array(60).fill(0).fill(1, sleeps, wakes));
+                } else if (match[6] == 'falls asleep') {
+                    sleeps = Number(match[5]);
+                }
+            });     
+
+            Object.keys(guards).forEach((guard, index)=> {
+                guards[guard] = guards[guard].reduce((prev, curr) => {
+                        return prev.map((value, index) => {
+                            return value + curr[index];
+                        });
+                    }, guards[guard][0]);
+
+                if (guards[guard] == undefined) {
+                    guards[guard] = new Array(60).fill(0);
+                }                   
+            });
+
+            Object.keys(guards).forEach((guard, index)=> { guards[guard] = guards[guard].indexOf(Math.max(...guards[guard])); });
+
+            let guard = Object.keys(guards).sort((a, b) => guards[b] - guards[a])[0];
+
+            return guard * guards[guard];
 
         }]    
 }
